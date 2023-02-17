@@ -33,7 +33,7 @@ namespace ACSITPortal.Helpers
             try
             {
                 _httpContextAccessor.HttpContext.Session.SetString("User",
-                    JsonConvert.SerializeObject(_userService.GetUserById(user.UserId)));
+                    JsonConvert.SerializeObject(_userService.GetUserByName(user.UserLogin)));
             }
             catch (Exception)
             {

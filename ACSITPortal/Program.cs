@@ -1,4 +1,6 @@
 using ACSITPortal.Data;
+using ACSITPortal.Helpers;
+using ACSITPortal.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,10 @@ builder.Services.AddDbContext<ACSITPortalContext>(options =>
 }, ServiceLifetime.Scoped);
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<SessionManager>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSession(options =>
@@ -29,6 +35,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

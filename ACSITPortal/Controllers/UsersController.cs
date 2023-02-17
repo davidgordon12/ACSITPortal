@@ -38,16 +38,16 @@ namespace ACSITPortal.Controllers
 
             // If our Login method returned false for any reason,
             // return the view with a generic error
-            if (!_userService.CreateUser(_user))
+            if (!_userService.Login(_user))
             {
-                ViewBag.SignupError = "Incorrect Username / Password";
+                ViewBag.LoginError = "Incorrect Username / Password";
                 return View();
             }
 
             // Otherwise, create a session and
             // return the user to the home page
             _sessionManager.CreateUserSession(_user);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Signup()
@@ -78,7 +78,7 @@ namespace ACSITPortal.Controllers
             // Otherwise, create a session and
             // return the user to the home page
             _sessionManager.CreateUserSession(_user);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

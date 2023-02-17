@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ACSITPortal.Helpers;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,8 +24,24 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Posts</a>
                         </li>
+                        @inject SessionManager _sessionManager
+                        @if (_sessionManager.GetUserSession() is null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Login" asp-controller="Users">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Signup" asp-controller="Users">Signup</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Profile" asp-controller="Users">Profile</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

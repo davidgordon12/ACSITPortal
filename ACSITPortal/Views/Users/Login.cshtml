@@ -1,0 +1,24 @@
+﻿@model LoginViewModel
+
+<form method="post" asp-action="Login" asp-controller="Users">
+    <h5 class="text-danger">@ViewBag.LoginError</h5>
+    <div class="form-group">
+        <label class="form-label">User login</label>
+        <input class="form-control" asp-for="UserLogin" />
+        <span class="text-danger" asp-validation-for="UserLogin"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <input class="form-control" asp-for="UserPassword" />
+        <span class="text-danger" asp-validation-for="UserPassword"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a class="btn btn-danger" asp-action="Index" asp-controller="Home">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

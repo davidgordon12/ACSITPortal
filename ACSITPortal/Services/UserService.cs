@@ -27,6 +27,21 @@ namespace ACSITPortal.Services
         }
 
         /// <summary>
+        /// Gets a user by the given name
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The user with the matching name</returns>
+        public User GetUserByName(string name)
+        {
+            try
+            {
+                return _context.Users.Where(u => u.UserLogin == name).FirstOrDefault();
+            }
+            catch
+            { return null; }
+        }
+
+        /// <summary>
         /// Adds a user to the database
         /// </summary>
         /// <param name="user"></param>
