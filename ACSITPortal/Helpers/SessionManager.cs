@@ -6,7 +6,6 @@ namespace ACSITPortal.Helpers
 {
     public class SessionManager
     {
-#pragma warning disable 8602, 8603, 8604
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserService _userService;
 
@@ -43,5 +42,4 @@ namespace ACSITPortal.Helpers
             }
         }
     }
-}
 }
