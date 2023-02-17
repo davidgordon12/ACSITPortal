@@ -3,122 +3,73 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ACSITPortal.Data;
 using ACSITPortal.Entities;
+using ACSITPortal.Services;
+using ACSITPortal.Helpers;
 
 namespace ACSITPortal.Controllers
 {
     public class PostsController : Controller
     {
-        private readonly ACSITPortalContext _context;
+        private readonly PostService _postService;
+        private readonly SessionManager _sessionManager;
 
-        public PostsController(ACSITPortalContext context)
+        public PostsController(PostService postService)
         {
-            _context = context;
+            postService = _postService;
         }
 
-        // GET: Posts
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return View(await _context.Posts.ToListAsync());
-        }
+            var posts = _postService.GetAllPosts();
 
-        // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Posts == null)
+            if (posts is null)
             {
-                return NotFound();
+                /* This will stop ASP from giving a null-reference error
+                   if there are no posts in the database */
+                posts = Enumerable.Empty<Post>().ToList();
             }
 
-            var post = await _context.Posts
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            return View(post);
+            return View(posts);
         }
 
-        // GET: Posts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Posts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,PostTitle,PostContent,DateCreated,DateUpdated,UserId")] Post post)
+        public IActionResult Create(Post post)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
+            _postService.CreatePost(post);
+            return RedirectToAction("Index");
         }
 
-        // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null || _context.Posts == null)
+            var post = _postService.GetPostById(id);
+
+            if (post is null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
             return View(post);
         }
 
-        // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,PostTitle,PostContent,DateCreated,DateUpdated,UserId")] Post post)
+        public IActionResult Edit(Post post)
         {
-            if (id != post.PostId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(post);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PostExists(post.PostId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
+            _postService.UpdatePost(post);
+            return View();
         }
 
-        // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id) 
         {
-            if (id == null || _context.Posts == null)
-            {
-                return NotFound();
-            }
+            var post = _postService.GetPostById(id);
 
-            var post = await _context.Posts
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
+            if (post is null)
             {
                 return NotFound();
             }
@@ -126,28 +77,12 @@ namespace ACSITPortal.Controllers
             return View(post);
         }
 
-        // POST: Posts/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Delete(Post post)
         {
-            if (_context.Posts == null)
-            {
-                return Problem("Entity set 'ACSITPortalContext.Posts'  is null.");
-            }
-            var post = await _context.Posts.FindAsync(id);
-            if (post != null)
-            {
-                _context.Posts.Remove(post);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PostExists(int id)
-        {
-          return _context.Posts.Any(e => e.PostId == id);
+            _postService.DeletePost(post);
+            return RedirectToAction("Index");
         }
     }
 }
