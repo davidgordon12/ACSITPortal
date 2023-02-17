@@ -1,7 +1,24 @@
+using ACSITPortal.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ACSITPortalContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ACSITPortal"));
+}, ServiceLifetime.Scoped);
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = false;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
