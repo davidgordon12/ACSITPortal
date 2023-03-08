@@ -6,6 +6,7 @@
         public int UserId { get; set; }
         public string UserLogin { get; set; }
         public string UserPassword { get; set; }
+        public string Phone { get; set; }
 
         // Metadata
         public DateTime DateCreated { get; set; }

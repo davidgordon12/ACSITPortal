@@ -11,11 +11,13 @@ namespace ACSITPortal.Controllers
     public class UsersController : Controller
     {
         private readonly UserService _userService;
+        private readonly PostService _postService;
         private readonly SessionManager _sessionManager;
 
-        public UsersController(UserService userService, SessionManager sessionManager)
+        public UsersController(UserService userService, PostService postService, SessionManager sessionManager)
         {
             _userService = userService;
+            _postService = postService;
             _sessionManager = sessionManager;
         }
 
@@ -64,7 +66,8 @@ namespace ACSITPortal.Controllers
             User _user = new User
             {
                 UserLogin = user.UserLogin,
-                UserPassword = user.UserPassword
+                UserPassword = user.UserPassword,
+                Phone = user.Phone,
             };
 
             // If our CreateUser method returned false for any reason,
@@ -79,6 +82,20 @@ namespace ACSITPortal.Controllers
             // return the user to the home page
             _sessionManager.CreateUserSession(_user);
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Profile()
+        {
+            List<Post> posts = _postService.GetPostsByUser(_sessionManager.GetUserSession().UserId);
+
+            foreach(var post in posts)
+            {
+                /* If the post has 0 threads, create an empty list
+                 * so .NET doesn't give us a null warning */
+                if (post.Threads is null)
+                    post.Threads = Enumerable.Empty<Entities.Thread>().ToList();
+            }
+            return View(posts);
         }
     }
 }

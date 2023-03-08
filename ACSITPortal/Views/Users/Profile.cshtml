@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Post>
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>Profile</h1>
+
+<p>
+    <a asp-action="CreatePost" asp-controller="Home">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Post Title
+            </th>
+            <th>
+                Threads
+            </th>
+            <th>
+                Date Created
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.PostTitle
+            </td>
+            <td>
+                @item.Threads.Count()
+            </td>
+            <td>
+                @item.DateCreated
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PostId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

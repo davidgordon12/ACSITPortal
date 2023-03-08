@@ -1,15 +1,37 @@
 ﻿using ACSITPortal.Data;
 using ACSITPortal.Entities;
+using ACSITPortal.Helpers;
 
 namespace ACSITPortal.Services
 {
     public class PostService
     {
         private readonly ACSITPortalContext _context;
+        private readonly SessionManager _sessionManager;
+
+        public PostService(ACSITPortalContext context, SessionManager sessionManager)
+        {
+            _context = context;
+            _sessionManager = sessionManager;
+        }
 
         public List<Post> GetAllPosts()
         {
             return _context.Posts.ToList();
+        }
+
+        public List<Post> GetPostsByUser(int userId)
+        {
+            try
+            {
+                return _context.Posts
+                    .Where(p => p.UserId == userId)
+                    .ToList();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public Post GetPostById(int id)
@@ -30,6 +52,7 @@ namespace ACSITPortal.Services
         {
             try
             {
+                post.DateCreated = DateTime.Now;
                 _context.Posts.Add(post);
                 _context.SaveChanges();
                 return true;

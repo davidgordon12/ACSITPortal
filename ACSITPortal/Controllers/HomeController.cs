@@ -1,4 +1,7 @@
-﻿using ACSITPortal.Models;
+﻿using ACSITPortal.Entities;
+using ACSITPortal.Helpers;
+using ACSITPortal.Models;
+using ACSITPortal.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,11 +9,13 @@ namespace ACSITPortal.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly PostService _postService;
+        private readonly SessionManager _sessionManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(PostService postService, SessionManager sessionManager)
         {
-            _logger = logger;
+            _postService = postService;
+            _sessionManager = sessionManager;
         }
 
         public IActionResult Index()
@@ -21,6 +26,20 @@ namespace ACSITPortal.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult CreatePost()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreatePost(Post post)
+        {
+            post.UserId = _sessionManager.GetUserSession().UserId;
+
+            _postService.CreatePost(post);
+            return RedirectToAction("Profile", "Users");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
