@@ -5,6 +5,7 @@ using ACSITPortal.Services;
 using ACSITPortal.Helpers;
 using ACSITPortal.Entities;
 using ACSITPortal.Models;
+using System.Xml.Serialization;
 
 namespace ACSITPortal.Controllers
 {
@@ -96,6 +97,35 @@ namespace ACSITPortal.Controllers
                     post.Threads = Enumerable.Empty<Entities.Thread>().ToList();
             }
             return View(posts);
+        }
+
+        public IActionResult DeletePost(int id)
+        {
+            _postService.DeletePost(id);
+            return RedirectToAction("Profile");
+        }
+
+        public IActionResult EditPost(int id)
+        {
+            var post = _postService.GetPostById(id);
+
+            if (post is null)
+                return NotFound();
+
+            return View(post);
+        }
+
+        [HttpPost]
+        public IActionResult EditPost(Post post)
+        {
+            _postService.UpdatePost(post);
+            return RedirectToAction("Profile");
+        }
+
+        public IActionResult Logout()
+        {
+            _sessionManager.ClearUserSessions();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
