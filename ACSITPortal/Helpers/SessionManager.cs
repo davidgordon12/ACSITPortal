@@ -41,5 +41,10 @@ namespace ACSITPortal.Helpers
                     "Error", "An error occured retrieving your profile");
             }
         }
+
+        public void ClearUserSessions()
+        {
+            _httpContextAccessor.HttpContext.Session.Clear();
+        }
     }
 }
