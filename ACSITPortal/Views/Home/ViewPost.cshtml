@@ -1,0 +1,6 @@
+﻿@model PostViewModel
+
+<h2>@Model.Post.PostTitle by @Model.User.UserLogin</h2>
+<h5>@Model.Post.DateCreated</h5>
+<h4>@Model.Post.PostContent</h4>
+<a class="btn btn-danger" asp-action="PostList">Go back</a>

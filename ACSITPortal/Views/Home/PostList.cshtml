@@ -1,0 +1,45 @@
+﻿@model ICollection<Post>
+
+@{
+    ViewData["Title"] = "Posts";
+}
+
+<h1>Posts</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Author
+            </th>
+            <th>
+                Post Title
+            </th>
+            <th>
+                Threads
+            </th>
+            <th>
+                Date Created
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    a
+                </td>
+                <td>
+                    <a asp-action="ViewPost" asp-route-id="@item.PostId">@item.PostTitle</a>
+                </td>
+                <td>
+                    @item.Threads.Count()
+                </td>
+                <td>
+                    @item.DateCreated
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

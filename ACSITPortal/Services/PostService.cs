@@ -77,11 +77,13 @@ namespace ACSITPortal.Services
             }
         }
 
-        public bool DeletePost(Post post)
+        public bool DeletePost(int id)
         {
             try
             {
-                _context.Posts.Update(post);
+                _context.Posts.Remove(_context.Posts
+                    .Where(p => p.PostId == id)
+                    .FirstOrDefault());
                 _context.SaveChanges();
                 return true;
             }

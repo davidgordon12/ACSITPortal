@@ -24,7 +24,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Posts</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="PostList">Posts</a>
                         </li>
                         @inject SessionManager _sessionManager
                         @if (_sessionManager.GetUserSession() is null)
@@ -40,6 +40,9 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-action="Profile" asp-controller="Users">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Logout" asp-controller="Users">Logout</a>
                             </li>
                         }
                     </ul>
