@@ -1,6 +1,7 @@
 ﻿using ACSITPortal.Data;
 using ACSITPortal.Entities;
 using ACSITPortal.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace ACSITPortal.Services
 {
@@ -67,7 +68,15 @@ namespace ACSITPortal.Services
         {
             try
             {
-                _context.Posts.Update(post);
+                var _post = _context.Posts
+                    .Where(p => p.PostId == post.PostId)
+                    .FirstOrDefault();
+
+                _post.DateUpdated = DateTime.Now;
+                _post.PostTitle = post.PostTitle;
+                _post.PostContent = post.PostContent;
+
+                _context.Posts.Update(_post);
                 _context.SaveChanges();
                 return true;
             }

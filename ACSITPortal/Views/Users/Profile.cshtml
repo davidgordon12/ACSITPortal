@@ -21,6 +21,9 @@
             <th>
                 Date Created
             </th>
+            <th>
+                Last Updated
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -28,7 +31,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <a asp-action="ViewPost" asp-route-id="@item.PostId">@item.PostTitle</a>
+                <a asp-action="ViewPost" asp-controller="Home" asp-route-id="@item.PostId">@item.PostTitle</a>
             </td>
             <td>
                 @item.Threads.Count()
@@ -36,6 +39,18 @@
             <td>
                 @item.DateCreated
             </td>
+                <td>
+                    @if(item.DateUpdated is null)
+                    {
+                        <p>
+                            Never
+                        </p>
+                    }
+                    else
+                    {
+                        @item.DateUpdated;
+                    }
+                </td>
             <td>
                 <a asp-action="EditPost" asp-route-id="@item.PostId">Edit</a> |
                 <a asp-action="DeletePost" asp-route-id="@item.PostId">Delete</a>
