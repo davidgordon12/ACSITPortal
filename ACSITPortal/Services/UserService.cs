@@ -1,5 +1,6 @@
 ﻿using ACSITPortal.Data;
 using ACSITPortal.Entities;
+using ACSITPortal.Helpers;
 
 namespace ACSITPortal.Services
 {
@@ -54,13 +55,21 @@ namespace ACSITPortal.Services
 
             try
             {
-                user.DateCreated = DateTime.Now;
+                // get the salted password and salt from HashPassword method
+                var strings = Encryption.HashPassword(user.UserPassword);
+
+                // and update the model with the data
+                user.UserPassword = strings[0];
+                user.UserSalt = strings[1];
 
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return true;
             }
-            catch { return false; }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -70,13 +79,13 @@ namespace ACSITPortal.Services
         /// <returns>True if successful</returns>
         public bool Login(User user)
         {
-            // check to see if an entity with matching username exists
+            // check to see if an entity with matching username and password exists
             if (_context.Users.Any(x => x.UserLogin == user.UserLogin))
             {
                 // if there is a match, check to see if the password in the database
                 // matches the user provided password
                 var _user = _context.Users.FirstOrDefault(x => x.UserLogin == user.UserLogin);
-                if (user.UserPassword == _user.UserPassword)
+                if (Encryption.HashPassword(user.UserPassword, _user.UserSalt) == _user.UserPassword)
                     return true;
                 else
                     return false;
