@@ -169,6 +169,20 @@ namespace ACSITPortal.Controllers
             return View(posts);
         }
 
+        public IActionResult CreatePost()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreatePost(Post post)
+        {
+            post.UserId = _sessionManager.GetUserSession().UserId;
+
+            _postService.CreatePost(post);
+            return RedirectToAction("Users");
+        }
+
         public IActionResult DeletePost(int id)
         {
             _postService.DeletePost(id);

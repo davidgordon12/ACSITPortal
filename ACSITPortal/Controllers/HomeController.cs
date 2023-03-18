@@ -63,20 +63,6 @@ namespace ACSITPortal.Controllers
             return View();
         }
 
-        public IActionResult CreatePost()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult CreatePost(Post post)
-        {
-            post.UserId = _sessionManager.GetUserSession().UserId;
-
-            _postService.CreatePost(post);
-            return RedirectToAction("Profile", "Users");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
