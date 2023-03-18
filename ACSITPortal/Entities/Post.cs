@@ -10,6 +10,7 @@
         // Metadata
         public DateTime DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
+        public int? Reports { get; set; }
 
         // Relationships
         public int UserId { get; set; } // NAV to User

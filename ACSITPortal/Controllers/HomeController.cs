@@ -58,6 +58,33 @@ namespace ACSITPortal.Controllers
             return View(postModel);
         }
 
+        public IActionResult ReportPost(int id)
+        {
+            /* We need to get the post here so we can
+             * add a report to it */
+            var post = _postService.GetPostById(id);
+
+            if (post is null)
+                return NotFound();
+
+            if (post.Reports is null)
+                post.Reports = 1;
+            else
+                post.Reports += 1;
+
+            _postService.UpdatePost(post);
+
+            var postModel = new PostViewModel
+            {
+                Post = _postService.GetPostById(id),
+                User = _userService.GetUserById(post.UserId)
+            };
+
+            ViewBag.InfoMessage = "The post has been reported";
+
+            return View(postModel);
+        }
+
         public IActionResult Privacy()
         {
             return View();

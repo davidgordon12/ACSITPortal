@@ -72,6 +72,9 @@ namespace ACSITPortal.Services
                     .Where(p => p.PostId == post.PostId)
                     .FirstOrDefault();
 
+                if (post.Reports >= 5)
+                    DeletePost(post.PostId);
+
                 _post.DateUpdated = DateTime.Now;
                 _post.PostTitle = post.PostTitle;
                 _post.PostContent = post.PostContent;

@@ -180,7 +180,7 @@ namespace ACSITPortal.Controllers
             post.UserId = _sessionManager.GetUserSession().UserId;
 
             _postService.CreatePost(post);
-            return RedirectToAction("Users");
+            return RedirectToAction("Profile");
         }
 
         public IActionResult DeletePost(int id)
