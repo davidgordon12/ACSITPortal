@@ -2,13 +2,13 @@
 using System.Net;
 using System.Configuration;
 
-namespace ACSITPortal.Services
+namespace ACSITPortal.Helpers
 {
-    public class MailerService
+    public class Mailer
     {
         private readonly IConfiguration _configuration;
         private SmtpClient smtpClient;
-        public MailerService(IConfiguration configuration)
+        public Mailer(IConfiguration configuration)
         {
             _configuration = configuration;
         }

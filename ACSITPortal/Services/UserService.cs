@@ -8,8 +8,8 @@ namespace ACSITPortal.Services
     public class UserService
     {
         private readonly ACSITPortalContext _context;
-        private readonly MailerService _mailer;
-        public UserService(ACSITPortalContext context, MailerService mailer)
+        private readonly Mailer _mailer;
+        public UserService(ACSITPortalContext context, Mailer mailer)
         {
             _context = context;
             _mailer = mailer;

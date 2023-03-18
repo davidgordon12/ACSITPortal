@@ -46,6 +46,13 @@ namespace ACSITPortal.Controllers
             if (!_userService.Login(_user))
             {
                 ViewBag.LoginError = "Incorrect Username / Password";
+                _sessionManager.SetLoginAttempts();
+                return View();
+            }
+
+            if(_sessionManager.GetLoginAttempts() > 3)
+            {
+                ViewBag.LoginError = "Too many login attempts! Try again later";
                 return View();
             }
 

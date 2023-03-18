@@ -8,11 +8,25 @@ namespace ACSITPortal.Helpers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserService _userService;
+        public int LoginAttempts { get; set; } = 0;
 
         public SessionManager(IHttpContextAccessor httpContextAccessor, UserService userService)
         {
             _httpContextAccessor = httpContextAccessor;
             _userService = userService;
+        }
+
+        public void SetLoginAttempts()
+        {
+            LoginAttempts = GetLoginAttempts() + 1;
+            _httpContextAccessor.HttpContext.Session.SetString("LoginAttempts",
+                    LoginAttempts.ToString());
+        }
+
+        public int GetLoginAttempts()
+        {
+            return Convert.ToInt32(_httpContextAccessor
+                .HttpContext.Session.GetString("LoginAttempts"));
         }
 
         public User GetUserSession()
