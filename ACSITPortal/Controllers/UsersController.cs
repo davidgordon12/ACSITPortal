@@ -179,7 +179,12 @@ namespace ACSITPortal.Controllers
         {
             post.UserId = _sessionManager.GetUserSession().UserId;
 
-            _postService.CreatePost(post);
+            if(!_postService.CreatePost(post))
+            {
+                ViewBag.ErrMessage = "Could not create post. Please note, you may only have 5 posts at a time";
+                return View();
+            }
+
             return RedirectToAction("Profile");
         }
 

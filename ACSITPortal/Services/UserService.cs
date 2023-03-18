@@ -2,6 +2,7 @@
 using ACSITPortal.Entities;
 using ACSITPortal.Helpers;
 using ACSITPortal.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ACSITPortal.Services
 {
@@ -39,7 +40,9 @@ namespace ACSITPortal.Services
         {
             try
             {
-                return _context.Users.Where(u => u.UserLogin == name).FirstOrDefault();
+                return _context.Users
+                    .Where(u => u.UserLogin == name)
+                    .FirstOrDefault();
             }
             catch
             { return null; }
@@ -65,6 +68,18 @@ namespace ACSITPortal.Services
             try
             {
                 return _context.Users.Where(u => u.ActionToken == token).FirstOrDefault();
+            }
+            catch
+            { return null; }
+        }
+
+        public List<Post> GetUsersPosts(int id)
+        {
+            try
+            {
+                return _context.Posts
+                    .Where(p => p.UserId == id)
+                    .ToList();
             }
             catch
             { return null; }

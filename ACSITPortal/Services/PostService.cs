@@ -53,6 +53,11 @@ namespace ACSITPortal.Services
         {
             try
             {
+                if(GetPostsByUser(_sessionManager.GetUserSession().UserId).Count() >= 5)
+                {
+                    return false;
+                }
+
                 post.DateCreated = DateTime.Now;
                 _context.Posts.Add(post);
                 _context.SaveChanges();
