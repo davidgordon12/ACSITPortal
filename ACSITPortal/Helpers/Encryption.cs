@@ -56,5 +56,10 @@ namespace ACSITPortal.Helpers
 
             return hashed;
         }
+
+        public static string GenerateRandomToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+        }
     }
 }

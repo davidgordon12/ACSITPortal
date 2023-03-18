@@ -2,15 +2,15 @@
 
 <form method="post" asp-action="Signup" asp-controller="Users">
     <div class="form-group">
-        <label class="form-label">User login</label>
+        <label class="form-label">Username</label>
         <input class="form-control" asp-for="UserLogin" />
         <span class="text-danger" asp-validation-for="UserLogin"></span>
     </div>
 
     <div class="form-group">
-        <label class="form-label">Phone Number</label>
-        <input type="number" class="form-control" asp-for="Phone" />
-        <span class="text-danger" asp-validation-for="Phone"></span>
+        <label class="form-label">Email</label>
+        <input class="form-control" asp-for="Email" />
+        <span class="text-danger" asp-validation-for="Email"></span>
     </div>
 
     <div class="form-group">
@@ -19,7 +19,7 @@
         <span class="text-danger" asp-validation-for="UserPassword"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label>Confirm password</label>
         <input type="password" class="form-control" asp-for="ConfirmPassword" />
         <span class="text-danger" asp-validation-for="ConfirmPassword"></span>

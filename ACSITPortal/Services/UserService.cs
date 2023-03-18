@@ -1,15 +1,18 @@
 ﻿using ACSITPortal.Data;
 using ACSITPortal.Entities;
 using ACSITPortal.Helpers;
+using ACSITPortal.Models;
 
 namespace ACSITPortal.Services
 {
     public class UserService
     {
         private readonly ACSITPortalContext _context;
-        public UserService(ACSITPortalContext context)
+        private readonly MailerService _mailer;
+        public UserService(ACSITPortalContext context, MailerService mailer)
         {
             _context = context;
+            _mailer = mailer;
         }
 
         /// <summary>
@@ -37,6 +40,31 @@ namespace ACSITPortal.Services
             try
             {
                 return _context.Users.Where(u => u.UserLogin == name).FirstOrDefault();
+            }
+            catch
+            { return null; }
+        }
+
+        /// <summary>
+        /// Gets a user by the given email
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The user with the matching email</returns>
+        public User GetUserByEmail(string email)
+        {
+            try
+            {
+                return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+            }
+            catch
+            { return null; }
+        }
+
+        public User GetUserByToken(string token)
+        {
+            try
+            {
+                return _context.Users.Where(u => u.ActionToken == token).FirstOrDefault();
             }
             catch
             { return null; }
@@ -92,6 +120,29 @@ namespace ACSITPortal.Services
             }
 
             return false;
+        }
+
+        public void RequestResetPassword(User user)
+        {
+            // Creates a random token that the user will use to authenticate
+            user.ActionToken = Encryption.GenerateRandomToken();
+            user.TokenExpires = DateTime.Now.AddMinutes(10);
+            _context.SaveChanges();
+
+            _mailer.SendEmail(user.Email, "Password reset token", "We requested a password reset for this account. If this was not you, ignore this email. If this was you, paste this code into the form \n" + user.ActionToken);
+        }
+
+        public bool ResetPassword(User user, string newPassword)
+        {
+            try
+            {
+                // Hash the new password before updating it in the database
+                newPassword = Encryption.HashPassword(newPassword, user.UserSalt);
+                user.UserPassword = newPassword;
+                _context.Users.Update(user);
+                _context.SaveChanges();
+                return true;
+            } catch (Exception) { return false; }
         }
     }
 }

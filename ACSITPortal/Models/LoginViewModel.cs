@@ -9,7 +9,7 @@ namespace ACSITPortal.Models
         public string? UserLogin { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
-        [MaxLength(55, ErrorMessage = "Please enter a name less than 55 characters")]
+        [MaxLength(100, ErrorMessage = "Please enter a name less than 100 characters")]
         public string? UserPassword { get; set; }
     }
 }

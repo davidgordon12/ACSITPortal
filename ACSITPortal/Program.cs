@@ -17,6 +17,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<MailerService>();
 builder.Services.AddScoped<SessionManager>();
 
 builder.Services.AddMemoryCache();

@@ -6,6 +6,8 @@ using ACSITPortal.Helpers;
 using ACSITPortal.Entities;
 using ACSITPortal.Models;
 using System.Xml.Serialization;
+using System.Security.Cryptography;
+using NuGet.Common;
 
 namespace ACSITPortal.Controllers
 {
@@ -68,7 +70,7 @@ namespace ACSITPortal.Controllers
             {
                 UserLogin = user.UserLogin,
                 UserPassword = user.UserPassword,
-                Phone = user.Phone,
+                Email = user.Email,
             };
 
             // If our CreateUser method returned false for any reason,
@@ -83,6 +85,67 @@ namespace ACSITPortal.Controllers
             // return the user to the home page
             _sessionManager.CreateUserSession(_user);
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(string email)
+        {
+            if (email is null)
+                return View();
+
+            var user = _userService.GetUserByEmail(email);
+
+            if(user is null)
+            {
+                ViewBag.ErrMessage = "There is no account that matches this email.";
+                return View();
+            }
+
+            _userService.RequestResetPassword(user);
+
+            return RedirectToAction("ResetPassword");
+        }
+
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            if(resetPasswordViewModel.Token is null)
+            {
+                ViewBag.ErrMessage = "Please enter a token";
+                return View();
+            }
+
+            var user = _userService.GetUserByToken(resetPasswordViewModel.Token);
+
+            if (user is null)
+            {
+                ViewBag.ErrMessage = "Token does not match";
+                return View();
+            }
+
+            if(DateTime.Now > user.TokenExpires)
+            {
+                ViewBag.ErrMessage = "Token has expired.";
+                return View();
+            }
+
+            if(!_userService.ResetPassword(user, resetPasswordViewModel.NewPassword))
+            {
+                ViewBag.ErrMessage = "Oops! Something went wrong, try again later.";
+                return View();
+            }
+
+            return RedirectToAction("Login");
         }
 
         public IActionResult Profile()
