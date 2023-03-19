@@ -14,6 +14,24 @@ namespace ACSITPortal.Data
         {
         }
 
+        public void EnableIdentityInsert()
+        {
+            using (var transaction = Database.BeginTransaction())
+            {
+                Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Users] ON;");
+                transaction.Commit();
+            };
+        }
+
+        public void DisableIdentityInsert()
+        {
+            using (var transaction = Database.BeginTransaction())
+            {
+                Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Users] OFF;");
+                transaction.Commit();
+            };
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Entities.Thread> Threads { get; set; }

@@ -31,6 +31,8 @@ namespace ACSITPortal.Controllers
 
             foreach (var post in posts)
             {
+                post.Threads = _postService.GetThreadsByPostId(post.PostId);
+
                 /* If the post has 0 threads, create an empty list
                  * so .NET doesn't give us a null warning */
                 if (post.Threads is null)
@@ -51,8 +53,9 @@ namespace ACSITPortal.Controllers
 
             var postModel = new PostViewModel
             {
-                Post = _postService.GetPostById(id),
-                User = _userService.GetUserById(post.UserId)
+                Post = post,
+                User = _userService.GetUserById(post.UserId),
+                Threads = _postService.GetThreadsByPostId(post.PostId),
             };
 
             return View(postModel);
@@ -76,13 +79,50 @@ namespace ACSITPortal.Controllers
 
             var postModel = new PostViewModel
             {
-                Post = _postService.GetPostById(id),
-                User = _userService.GetUserById(post.UserId)
+                Post = post,
+                User = _userService.GetUserById(post.UserId),
+                Threads = _postService.GetThreadsByPostId(post.PostId),
             };
 
             ViewBag.InfoMessage = "The post has been reported";
 
             return View(postModel);
+        }
+
+        [HttpGet]
+        public IActionResult CreateThread(int id)
+        {
+            if (_sessionManager.GetUserSession() is null)
+                return RedirectToAction("Login", "Users");
+
+            Entities.Thread thread = new Entities.Thread();
+            thread.PostId = id;
+            return View(thread);
+        }
+
+        [HttpPost]
+        public IActionResult CreateThread(Entities.Thread thread)
+        {
+            if(!_postService.CreateThread(thread))
+            {
+                ViewBag.ErrMessage = "There was an error creating your thread";
+                return View(thread);
+            }
+
+            var post = _postService.GetPostById(thread.PostId);
+
+            if (post is null)
+                return NotFound();
+
+            var postModel = new PostViewModel
+            {
+                Post = post,
+                User = _userService.GetUserById(post.UserId),
+                Threads = _postService.GetThreadsByPostId(post.PostId),
+            };
+
+            ViewBag.ErrMessage = "";
+            return View("ViewPost", postModel);
         }
 
         public IActionResult Privacy()

@@ -161,6 +161,8 @@ namespace ACSITPortal.Controllers
 
             foreach(var post in posts)
             {
+                post.Threads = _postService.GetThreadsByPostId(post.PostId);
+
                 /* If the post has 0 threads, create an empty list
                  * so .NET doesn't give us a null warning */
                 if (post.Threads is null)

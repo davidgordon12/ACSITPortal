@@ -6,5 +6,7 @@ namespace ACSITPortal.Models
     {
         public Post? Post { get; set; }
         public User? User { get; set; }
+
+        public List<Entities.Thread>? Threads { get; set; }
     }
 }

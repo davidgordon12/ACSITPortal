@@ -1,4 +1,5 @@
-﻿@model PostViewModel
+﻿@using ACSITPortal.Services;
+@model PostViewModel
 
 <span class="text-danger">@ViewBag.InfoMessage</span>
 <div class="mb-3">
@@ -8,4 +9,15 @@
     <h4>@Model.Post.PostContent</h4>
 </div>
 
+@inject UserService _userService
+
+@foreach(var thread in Model.Threads)
+{
+    <div>
+        <h4>Thread from @_userService.GetUserById(thread.UserId).UserLogin</h4>
+        <h4>@thread.ThreadTitle</h4>
+        <h5>@thread.ThreadContent</h5>
+    </div>
+}
+<a asp-action="CreateThread" asp-route-id="@Model.Post.PostId" class="btn btn-success">Reply</a>
 <a class="btn btn-danger" asp-action="PostList">Go back</a>

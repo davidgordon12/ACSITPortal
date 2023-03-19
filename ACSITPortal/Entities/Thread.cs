@@ -13,6 +13,7 @@
 
         // Relationships
         public int PostId { get; set; } // NAV to Post
+        public int UserId { get; set; } // NAV to User
         public ICollection<Reply>? Replies { get; set; }
     }
 }

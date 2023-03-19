@@ -2,6 +2,8 @@
 using ACSITPortal.Entities;
 using ACSITPortal.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading;
 
 namespace ACSITPortal.Services
 {
@@ -100,6 +102,65 @@ namespace ACSITPortal.Services
             {
                 _context.Posts.Remove(_context.Posts
                     .Where(p => p.PostId == id)
+                    .FirstOrDefault());
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public List<Entities.Thread> GetThreadsByPostId(int id)
+        {
+            return _context.Threads.Where(t=>t.PostId == id).ToList();
+        }
+
+        public bool CreateThread(Entities.Thread thread)
+        {
+            try
+            {
+                thread.DateCreated = DateTime.Now;
+                thread.UserId = _sessionManager.GetUserSession().UserId;
+                _context.Threads.Add(thread);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool UpdateThread(Entities.Thread thread)
+        {
+            try
+            {
+                var _thread = _context.Threads
+                    .Where(t => t.ThreadId == thread.ThreadId)
+                    .FirstOrDefault();
+
+                _thread.DateUpdated = DateTime.Now;
+                _thread.ThreadTitle = thread.ThreadTitle;
+                _thread.ThreadContent = thread.ThreadContent;
+
+                _context.Threads.Update(_thread);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteThread(int id)
+        {
+            try
+            {
+                _context.Threads.Remove(_context.Threads
+                    .Where(t => t.ThreadId == id)
                     .FirstOrDefault());
                 _context.SaveChanges();
                 return true;
