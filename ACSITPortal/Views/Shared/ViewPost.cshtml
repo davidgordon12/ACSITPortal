@@ -1,0 +1,38 @@
+﻿@using ACSITPortal.Services;
+@model PostViewModel
+
+<div class="content">
+
+    <span class="text-danger">@ViewBag.InfoMessage</span>
+    <div class="post">
+        <h2>@Model.Post.PostTitle by @Model.User.UserLogin</h2>
+        <div class="post-content">
+            <a class="text-danger" asp-action="ReportPost" asp-controller="Users" asp-route-id="@Model.Post.PostId">Report this post</a>
+            <h5>@Model.Post.DateCreated</h5>
+            <h4>@Model.Post.PostContent</h4>
+
+        @inject UserService _userService
+
+        @foreach (var thread in Model.Threads)
+        {
+            <div class="thread">
+                <h5 class="thread-title">Thread from @_userService.GetUserById(thread.UserId).UserLogin</h5>
+                <div class="thread-content">
+                    <h6>@thread.ThreadContent</h6>
+                    <a style="background-color: #01987a; margin-top: 10px; color: azure" id="replyBtn" class="btn" asp-action="CreateReply" asp-controller="Users" asp-route-id="@thread.ThreadId">Reply</a>
+                    @foreach (var reply in thread.Replies)
+                    {
+                        <div class="reply">
+                            <p class="reply-title">Reply from @_userService.GetUserById(thread.UserId).UserLogin</p>
+                            <p class="reply-content">@reply.ReplyContent</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <a style="background-color: #01987a; color: azure; margin-top: 10px;" id="threadBtn" asp-action="CreateThread" asp-controller="Users" asp-route-id="@Model.Post.PostId" class="btn">Add Thread</a>
+        <a style="margin-top: 10px;" class="btn btn-danger" asp-action="PostList">Go back</a>
+
+        </div>
+    </div>
+</div>

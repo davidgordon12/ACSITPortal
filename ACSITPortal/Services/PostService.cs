@@ -114,7 +114,22 @@ namespace ACSITPortal.Services
 
         public List<Entities.Thread> GetThreadsByPostId(int id)
         {
-            return _context.Threads.Where(t=>t.PostId == id).ToList();
+            var threads = _context.Threads.Where(t=>t.PostId == id).ToList();
+
+            foreach (var thread in threads)
+            {
+                thread.Replies = GetRepliesByThread(thread.ThreadId);
+
+                if (thread.Replies is null)
+                    thread.Replies = Enumerable.Empty<Reply>().ToList();
+            }
+
+            return threads;
+        }
+
+        public Entities.Thread GetThreadById(int id)
+        {
+            return _context.Threads.Where(t => t.ThreadId == id).FirstOrDefault();
         }
 
         public bool CreateThread(Entities.Thread thread)
@@ -142,7 +157,6 @@ namespace ACSITPortal.Services
                     .FirstOrDefault();
 
                 _thread.DateUpdated = DateTime.Now;
-                _thread.ThreadTitle = thread.ThreadTitle;
                 _thread.ThreadContent = thread.ThreadContent;
 
                 _context.Threads.Update(_thread);
@@ -169,6 +183,27 @@ namespace ACSITPortal.Services
             {
                 return false;
             }
+        }
+
+        public bool CreateReply(Reply reply)
+        {
+            try
+            {
+                reply.DateCreated = DateTime.Now;
+                reply.UserId = _sessionManager.GetUserSession().UserId;
+                _context.Replies.Add(reply);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public List<Reply> GetRepliesByThread(int threadId)
+        {
+            return _context.Replies.Where(r=>r.ThreadId== threadId).ToList();
         }
     }
 }

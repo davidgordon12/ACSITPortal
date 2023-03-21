@@ -1,0 +1,65 @@
+/* ========================GLOBAL============================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+/* ========================POST============================ */
+
+
+h2 {
+    background-color: #01987a;
+    color: azure;
+    padding: 15px;
+}
+
+.post-content {
+    padding: 15px;
+    background-color: #f2f2f2;
+}
+
+/* ========================THREAD============================ */
+
+.thread {
+    margin-top: 15px;
+}
+
+.thread-title {
+    padding: 15px;
+    background-color: #01987a;
+    color: azure;
+    margin: 0;
+}
+
+.thread-content {
+    padding: 15px;
+    background-color: #f2f2f2;
+    padding-bottom: 15px;
+}
+
+/* ========================REPLY============================ */
+
+.reply {
+    background-color: #f2f2f2;
+}
+
+.reply-title {
+    padding: 5px;
+    background-color: #01987a;
+    color: azure;
+}
+
+.reply-content {
+    padding: 15px;
+    background-color: #f2f2f2;
+}
+
+    .reply > p {
+        margin-top: 10px;
+    }

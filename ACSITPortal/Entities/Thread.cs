@@ -4,7 +4,6 @@
     {
         // Thread Information
         public int ThreadId { get; set; }
-        public string ThreadTitle { get; set; }
         public string ThreadContent { get; set; }
 
         // Metadata

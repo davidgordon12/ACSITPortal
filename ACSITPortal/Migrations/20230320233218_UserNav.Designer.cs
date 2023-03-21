@@ -4,6 +4,7 @@ using ACSITPortal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACSITPortal.Migrations
 {
     [DbContext(typeof(ACSITPortalContext))]
-    partial class ACSITPortalContextModelSnapshot : ModelSnapshot
+    [Migration("20230320233218_UserNav")]
+    partial class UserNav
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,6 +78,10 @@ namespace ACSITPortal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ReplyTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ThreadId")
                         .HasColumnType("int");
 
@@ -106,6 +113,10 @@ namespace ACSITPortal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ThreadContent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThreadTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

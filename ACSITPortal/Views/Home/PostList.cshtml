@@ -5,8 +5,10 @@
 }
 
 <h1>Posts</h1>
-
-<table class="table">
+<p>
+    Have your own idea? Click <a style="color: #01987a;" asp-action="CreatePost" asp-controller="Users">here</a> to get started.
+</p>
+<table class="table table-striped text-center">
     <thead>
         <tr>
             <th>
@@ -25,7 +27,7 @@
         {
             <tr>
                 <td>
-                    <a asp-action="ViewPost" asp-route-id="@item.PostId">@item.PostTitle</a>
+                    <a style="color: #01987a; font-weight: 700;" asp-action="ViewPost" asp-route-id="@item.PostId">@item.PostTitle</a>
                 </td>
                 <td>
                     @item.Threads.Count()
