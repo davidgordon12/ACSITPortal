@@ -1,5 +1,10 @@
 ﻿@model SignupViewModel
 
+@{
+    ViewData["Title"] = "Signup";
+}
+
+<span class="text-danger">@ViewBag.SignupError</span>
 <form method="post" asp-action="Signup" asp-controller="Users">
     <div class="form-group">
         <label class="form-label">Username</label>

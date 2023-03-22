@@ -59,11 +59,12 @@ namespace ACSITPortal.Controllers
             // Otherwise, create a session and
             // return the user to the home page
             _sessionManager.CreateUserSession(_user);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Profile");
         }
 
         public IActionResult Signup()
         {
+            ViewBag.SignupError = "This username is taken!";
             return View();
         }
 
@@ -84,13 +85,33 @@ namespace ACSITPortal.Controllers
             // return the view with a generic error
             if (!_userService.CreateUser(_user))
             {
-                ViewBag.SignupError = "Username is taken";
+                ViewBag.SignupError = "Username or email is taken";
                 return View();
             }
 
-            // Otherwise, create a session and
-            // return the user to the home page
-            _sessionManager.CreateUserSession(_user);
+            return RedirectToAction("VerifyUser", new { email = _user.Email });
+        }
+
+        public IActionResult VerifyUser(string email)
+        {
+            _userService.RequestVerification(email);
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult VerifyUser(VerifyUserViewModel verify)
+        {
+            var user = _userService.GetUserByEmail(verify.Email);
+
+            if (user is null)
+                return NotFound();
+
+            if (user.ActionToken == verify.Token)
+                _userService.VerifyUser(user);
+
+            // We need to tell the session that the user is now verified
+            _sessionManager.CreateUserSession(user);
+
             return RedirectToAction("Profile");
         }
 
@@ -178,6 +199,13 @@ namespace ACSITPortal.Controllers
                 ViewBag.ErrMessage = "";
                 return RedirectToAction("Login");
             }
+            
+            var user = _sessionManager.GetUserSession();
+
+            if(user.Verified == false)
+            {
+                return RedirectToAction("VerifyUser", new { email = _sessionManager.GetUserSession().Email });
+            }
 
             ViewBag.ErrMessage = "";
             return View();
@@ -228,6 +256,11 @@ namespace ACSITPortal.Controllers
 
         public IActionResult ReportPost(int id)
         {
+            if (_sessionManager.GetUserSession().Verified == false)
+            {
+                return RedirectToAction("VerifyUser", new { email = _sessionManager.GetUserSession().Email });
+            }
+
             /* We need to get the post here so we can
              * add a report to it */
             var post = _postService.GetPostById(id);
@@ -263,6 +296,12 @@ namespace ACSITPortal.Controllers
                 return RedirectToAction("Login");
             }
 
+
+            if (_sessionManager.GetUserSession().Verified == false)
+            {
+                return RedirectToAction("VerifyUser", new { email = _sessionManager.GetUserSession().Email });
+            }
+
             Entities.Thread thread = new Entities.Thread();
             thread.PostId = id;
             return View(thread);
@@ -287,6 +326,11 @@ namespace ACSITPortal.Controllers
             {
                 ViewBag.ErrMessage = "";
                 return RedirectToAction("Login");
+            }
+
+            if (_sessionManager.GetUserSession().Verified == false)
+            {
+                return RedirectToAction("VerifyUser", new { email = _sessionManager.GetUserSession().Email });
             }
 
             Reply reply = new Reply();

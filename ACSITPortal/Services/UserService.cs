@@ -21,7 +21,7 @@ namespace ACSITPortal.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>The user with the matching id</returns>
-        public User GetUserById(int id) 
+        public User GetUserById(int id)
         {
             try
             {
@@ -92,8 +92,8 @@ namespace ACSITPortal.Services
         /// <returns>True if successful</returns>
         public bool CreateUser(User user)
         {
-            // check to see if the username already exists
-            if (_context.Users.Any(x => x.UserLogin == user.UserLogin))
+            // check to see if the username or email already exists
+            if (_context.Users.Any(x => x.UserLogin == user.UserLogin || x.Email == user.Email))
                 return false;
 
             try
@@ -113,6 +113,22 @@ namespace ACSITPortal.Services
             {
                 return false;
             }
+        }
+
+        public bool VerifyUser(User user)
+        {
+            try
+            {
+                user.Verified = true;
+                _context.Users.Update(user);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
         /// <summary>
@@ -144,7 +160,20 @@ namespace ACSITPortal.Services
             user.TokenExpires = DateTime.Now.AddMinutes(10);
             _context.SaveChanges();
 
-            _mailer.SendEmail(user.Email, "Password reset token", "We requested a password reset for this account. If this was not you, ignore this email. If this was you, paste this code into the form \n" + user.ActionToken);
+            _mailer.SendEmail(user.Email, "Password reset token", "We have received a request for a password reset for this account. If this was not you, ignore this email. If this was you, paste this code into the form \n" + user.ActionToken);
+        }
+
+        public void RequestVerification(string email)
+        {
+            var user = GetUserByEmail(email);
+
+            // Creates a random token that the user will use to authenticate
+            user.ActionToken = Encryption.GenerateRandomToken();
+            user.TokenExpires = DateTime.Now.AddMinutes(10);
+            user.VerificationExpires = DateTime.Now.AddDays(7);
+            _context.SaveChanges();
+
+            _mailer.SendEmail(user.Email, "Account Verification Token", "Thank you for signing up on ACSIT Portal! To continue your account creation, paste this code into the verification form \n" + user.ActionToken);
         }
 
         public bool ResetPassword(User user, string newPassword)
@@ -157,7 +186,8 @@ namespace ACSITPortal.Services
                 _context.Users.Update(user);
                 _context.SaveChanges();
                 return true;
-            } catch (Exception) { return false; }
+            }
+            catch (Exception) { return false; }
         }
     }
 }

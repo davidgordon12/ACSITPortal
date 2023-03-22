@@ -19,6 +19,11 @@ h2 {
     padding: 15px;
 }
 
+.post {
+    border-left: 2px solid #3a11e5;
+
+}
+
 .post-content {
     padding: 15px;
     background-color: #f2f2f2;
@@ -27,6 +32,7 @@ h2 {
 /* ========================THREAD============================ */
 
 .thread {
+    border-left: 2px solid #3a11e5;
     margin-top: 15px;
 }
 
@@ -46,6 +52,7 @@ h2 {
 /* ========================REPLY============================ */
 
 .reply {
+    border-left: 2px solid #3a11e5;
     background-color: #f2f2f2;
 }
 

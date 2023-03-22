@@ -1,5 +1,9 @@
 ﻿@model LoginViewModel
 
+@{
+    ViewData["Title"] = "Login";
+}
+
 <form method="post" asp-action="Login" asp-controller="Users">
     <h5 class="text-danger">@ViewBag.LoginError</h5>
     <div class="form-group">
