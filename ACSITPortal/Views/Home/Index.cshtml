@@ -1,8 +1,14 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+﻿<div class="row mt-5">
+    <div class="col-lg-5">
+        <img id="index-image" src="https://www.ocregister.com/wp-content/uploads/2017/10/education_522908193.jpg?w=960" />
+    </div>
+    <div class="col-lg-2"></div>
+    <div class="col-lg-5">
+        <div class="hero">
+            <h3>Join the community!</h3>
+            <p>See why everyone is using our service to find their next business ideas. Become your own boss today.</p>
+            @await Html.PartialAsync("_SignupPartial", new SignupViewModel {})
+            <p>By signing up to our service, you agree to our terms of service & <a asp-action="Privacy" style="color: #3a11e5;">privacy policy</a>.</p>
+        </div>
+    </div>
 </div>

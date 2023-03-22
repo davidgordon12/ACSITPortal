@@ -6,9 +6,10 @@
 
 <h1>Posts</h1>
 <p>
-    Have your own idea? Click <a style="color: #01987a;" asp-action="CreatePost" asp-controller="Users">here</a> to get started.
+    Have your own idea? Click <a style="color: #3a11e5;" asp-action="CreatePost" asp-controller="Users">here</a> to get started.
 </p>
-<table class="table table-striped text-center">
+<input class="form-control w-25 mb-3" id="myInput" type="text" placeholder="Search..">
+<table id="dtBasicExample" class="table table-striped table-bordered text-center">
     <thead>
         <tr>
             <th>
@@ -22,12 +23,12 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="myTable">
         @foreach (var item in Model)
         {
-            <tr>
+            <tr id="table-row">
                 <td>
-                    <a style="color: #01987a; font-weight: 700;" asp-action="ViewPost" asp-route-id="@item.PostId">@item.PostTitle</a>
+                    <a style="color: #3a11e5;" asp-action="ViewPost" asp-route-id="@item.PostId">@item.PostTitle</a>
                 </td>
                 <td>
                     @item.Threads.Count()

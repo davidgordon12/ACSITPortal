@@ -91,7 +91,7 @@ namespace ACSITPortal.Controllers
             // Otherwise, create a session and
             // return the user to the home page
             _sessionManager.CreateUserSession(_user);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Profile");
         }
 
         public IActionResult ForgotPassword()
@@ -173,6 +173,12 @@ namespace ACSITPortal.Controllers
 
         public IActionResult CreatePost()
         {
+            if (_sessionManager.GetUserSession() is null)
+            {
+                ViewBag.ErrMessage = "";
+                return RedirectToAction("Login");
+            }
+
             ViewBag.ErrMessage = "";
             return View();
         }

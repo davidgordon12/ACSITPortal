@@ -19,7 +19,7 @@
                 <h5 class="thread-title">Thread from @_userService.GetUserById(thread.UserId).UserLogin</h5>
                 <div class="thread-content">
                     <h6>@thread.ThreadContent</h6>
-                    <a style="background-color: #01987a; margin-top: 10px; color: azure" id="replyBtn" class="btn" asp-action="CreateReply" asp-controller="Users" asp-route-id="@thread.ThreadId">Reply</a>
+                    <a style="background-color: #3a11e5; margin-top: 10px; color: azure" id="replyBtn" class="btn" asp-action="CreateReply" asp-controller="Users" asp-route-id="@thread.ThreadId">Reply</a>
                     @foreach (var reply in thread.Replies)
                     {
                         <div class="reply">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         }
-        <a style="background-color: #01987a; color: azure; margin-top: 10px;" id="threadBtn" asp-action="CreateThread" asp-controller="Users" asp-route-id="@Model.Post.PostId" class="btn">Add Thread</a>
+        <a style="background-color: #3a11e5; color: azure; margin-top: 10px;" id="threadBtn" asp-action="CreateThread" asp-controller="Users" asp-route-id="@Model.Post.PostId" class="btn">Add Thread</a>
         <a style="margin-top: 10px;" class="btn btn-danger" asp-action="PostList">Go back</a>
 
         </div>

@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ACSITPortal.styles.css" asp-append-version="true" />
 </head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav style="background-color: #fef1e5; border: none; box-shadow: none;" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ACSITPortal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,28 +23,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a style="color: #2b2b2b; font-weight: 600; font-family: 'Quicksand', sans-serif; font-size: 22px; border: 2px solid #2b2b2b; border-radius: 8px;" class="mx-3 nav-link" asp-area="" asp-controller="Home" asp-action="Index">ACSIT Portal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="PostList">Posts</a>
+                            <a style="color: #2b2b2b; font-weight: 500; font-family: 'Quicksand', sans-serif; font-size: 22px" class="nav-link" asp-area="" asp-controller="Home" asp-action="PostList">Posts</a>
                         </li>
                         @inject SessionManager _sessionManager
                         @if (_sessionManager.GetUserSession() is null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-action="Login" asp-controller="Users">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-action="Signup" asp-controller="Users">Signup</a>
+                                <a style="color: #3a11e5; font-weight: 500; font-family: 'Quicksand', sans-serif; font-size: 22px" class="nav-link" asp-action="Login" asp-controller="Users">Login</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-action="Profile" asp-controller="Users">Profile</a>
+                                <a style="color: #2b2b2b; font-weight: 500; font-family: 'Quicksand', sans-serif; font-size: 22px" class="nav-link" asp-action="Profile" asp-controller="Users">Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-action="Logout" asp-controller="Users">Logout</a>
+                                <a style="color: #3a11e5; font-weight: 500; font-family: 'Quicksand', sans-serif; font-size: 22px" class="nav-link" asp-action="Logout" asp-controller="Users">Logout</a>
                             </li>
                         }
                     </ul>
@@ -55,12 +54,6 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - ACSITPortal - <a style="color: #01987a;" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
