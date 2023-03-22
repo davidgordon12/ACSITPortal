@@ -19,7 +19,7 @@ namespace ACSITPortal.Helpers
             smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("moderndsnsam@gmail.com", _configuration.GetSection("SMTP")["SMTPPassword"]);
+            smtpClient.Credentials = new NetworkCredential(_configuration.GetSection("SMTP")["SMTPEmail"], _configuration.GetSection("SMTP")["SMTPPassword"]);
         }
         public void SendEmail(string toAddress, string subject, string body)
         {
@@ -27,7 +27,7 @@ namespace ACSITPortal.Helpers
 
             // Configure email message
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("moderndsnsam@gmail.com");
+            mailMessage.From = new MailAddress(_configuration.GetSection("SMTP")["SMTPEmail"]);
             mailMessage.To.Add(toAddress);
             mailMessage.Subject = subject;
             mailMessage.Body = body;
