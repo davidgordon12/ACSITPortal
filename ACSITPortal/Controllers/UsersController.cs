@@ -256,6 +256,11 @@ namespace ACSITPortal.Controllers
 
         public IActionResult ReportPost(int id)
         {
+            if (_sessionManager.GetUserSession() is null)
+            {
+                return View();
+            }
+
             if (_sessionManager.GetUserSession().Verified == false)
             {
                 return RedirectToAction("VerifyUser", new { email = _sessionManager.GetUserSession().Email });
