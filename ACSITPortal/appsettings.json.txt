@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "connectionString": "Your String Here"
+    "ACSITPortal": "Your String Here"
   },
   "SMTP": {
     "SMTPEmail": "Your email here",
