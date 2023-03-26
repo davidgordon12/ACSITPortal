@@ -1,0 +1,15 @@
+{
+  "ConnectionStrings": {
+    "connectionString": "Your String Here"
+  },
+  "SMTP": {
+    "SMTPEmail": "Your email here",
+    "SMTPPassword": "Your password here
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
