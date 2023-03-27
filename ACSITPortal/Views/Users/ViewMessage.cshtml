@@ -1,0 +1,42 @@
+﻿@using ACSITPortal.Services;
+@model ACSITPortal.Entities.Message
+
+@{
+    ViewData["Title"] = "ViewMessage";
+}
+
+<div>
+    <h4>Message from <strong style="color: #3a11e5">@_userService.GetUserById(Model.SenderId).UserLogin</strong> </h4>
+    <hr />
+    @inject UserService _userService
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Title
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MessageTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            Content
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MessageContent)
+        </dd>
+        <dt class = "col-sm-2">
+            Date Received
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MessageSentDate)
+        </dd>
+        <dt class = "col-sm-2">
+            From
+        </dt>
+        <dd class = "col-sm-10">
+            <strong>@_userService.GetUserById(Model.SenderId).UserLogin</strong>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="SendMessage" class="btn btn-acsit">Reply</a>
+    <a asp-action="Profile" class="btn btn-danger">Back</a>
+</div>

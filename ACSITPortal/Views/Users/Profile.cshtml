@@ -1,5 +1,6 @@
 ﻿@using ACSITPortal.Helpers;
-@model IEnumerable<Post>
+@using ACSITPortal.Services;
+@model ProfileViewModel
 
 @{
     ViewData["Title"] = "Profile";
@@ -8,56 +9,100 @@
 @inject SessionManager _sessionManager
 <h1>Welcome back, <b id="username">@_sessionManager.GetUserSession().UserLogin</b></h1>
 <span class="text-danger">@ViewBag.ErrMessage</span>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
 <p>
     Have an idea? Click <a style="color: #3a11e5;" asp-action="CreatePost" asp-controller="Users">here</a> to get started.
 </p>
-<table class="table table-striped text-center">
-    <thead>
-        <tr>
-            <th>
-                Post Title
-            </th>
-            <th>
-                Threads
-            </th>
-            <th>
-                Date Created
-            </th>
-            <th>
-                Last Updated
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                    <a style="color: #3a11e5; font-weight: 700;" asp-action="ViewPost" asp-controller="Home" asp-route-id="@item.PostId">@item.PostTitle</a>
-            </td>
-            <td>
-                @item.Threads.Count()
-            </td>
-            <td>
-                @item.DateCreated
-            </td>
-                <td>
-                    @if(item.DateUpdated is null)
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>
+                            Post Title
+                        </th>
+                        <th>
+                            Threads
+                        </th>
+                        <th>
+                            Date Created
+                        </th>
+                        <th>
+                            Last Updated
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Posts)
                     {
-                        <p>
-                            Never
-                        </p>
+                        <tr>
+                            <td>
+                                <a style="color: #3a11e5; font-weight: 700;" asp-action="ViewPost" asp-controller="Home" asp-route-id="@item.PostId">@item.PostTitle</a>
+                            </td>
+                            <td>
+                                @item.Threads.Count()
+                            </td>
+                            <td>
+                                @item.DateCreated
+                            </td>
+                            <td>
+                                @if (item.DateUpdated is null)
+                                {
+                                    <p>
+                                        Never
+                                    </p>
+                                }
+                                else
+                                {
+                                    @item.DateUpdated
+                                    ;
+                                }
+                            </td>
+                            <td>
+                                <a style="color: #3a11e5; font-weight: 700;" asp-action="EditPost" asp-route-id="@item.PostId">Edit</a> |
+                                <a style="color: #3a11e5; font-weight: 700;" asp-action="DeletePost" asp-route-id="@item.PostId">Delete</a>
+                            </td>
+                        </tr>
                     }
-                    else
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+        <p>Got something to say? Send a message <a style="color: #3a11e5;" asp-action="SendMessage" asp-controller="Users">here</a></p>
+            @inject UserService _userService
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>
+                            Message Title
+                        </th>
+                        <th>
+                            From
+                        </th>
+                        <th>
+                            Received
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Messages)
                     {
-                        @item.DateUpdated;
+                        <tr>
+                            <td>
+                                <a style="color: #3a11e5; font-weight: 700;" asp-action="ViewMessage" asp-controller="Users" asp-route-id="@item.MessageId">@item.MessageTitle</a>
+                            </td>
+                            <td>
+                                <p>@_userService.GetUserById(item.RecepientId).UserLogin</p>
+                            </td>
+                            <td>
+                                <p>@item.MessageSentDate</p>
+                            </td>
+                        </tr>
                     }
-                </td>
-            <td>
-                    <a style="color: #3a11e5; font-weight: 700;" asp-action="EditPost" asp-route-id="@item.PostId">Edit</a> |
-                    <a style="color: #3a11e5; font-weight: 700;" asp-action="DeletePost" asp-route-id="@item.PostId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

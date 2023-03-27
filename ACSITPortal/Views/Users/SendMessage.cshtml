@@ -1,0 +1,28 @@
+﻿@model SendMessageViewModel
+
+@{
+    ViewData["Title"] = "Send Message";
+}
+
+<span class="text-danger">@ViewBag.ErrMessage</span>
+<form asp-action="SendMessage" asp-controller="Users" method="post">
+        <div class="form-group">
+        <label asp-for="Recepient" class="control-label"></label>
+        <input asp-for="Recepient" class="form-control" />
+        <span asp-validation-for="Recepient" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Subject" class="control-label"></label>
+        <input asp-for="Subject" class="form-control" />
+        <span asp-validation-for="Subject" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Content" class="control-label"></label>
+        <input asp-for="Content" class="form-control" />
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Send Message" class="btn btn-acsit" />
+        <a asp-action="Profile" class="btn btn-danger">Back</a>
+    </div>
+</form>

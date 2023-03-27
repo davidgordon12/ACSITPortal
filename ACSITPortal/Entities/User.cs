@@ -8,6 +8,7 @@
         public string? UserPassword { get; set; }
         public string? UserSalt { get; set; }
         public string? Email { get; set; }
+        public List<Message>? Messages { get; set; } = Enumerable.Empty<Message>().ToList();
 
         // Metadata
         public DateTime DateCreated { get; set; }

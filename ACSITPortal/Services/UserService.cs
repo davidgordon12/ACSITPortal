@@ -189,5 +189,39 @@ namespace ACSITPortal.Services
             }
             catch (Exception) { return false; }
         }
+
+        public bool SendMessage(Message message, User user)
+        {
+            try
+            {
+                message.MessageSentDate = DateTime.Now;
+                user.Messages.Add(message);
+                _context.Users.Update(user);
+                _context.SaveChanges();
+
+                return true;
+            }
+            catch (Exception) { return false; }
+        }
+
+        public Message GetMessage(int id)
+        {
+            var message = _context.Messages.Where(m => m.MessageId == id).FirstOrDefault();
+
+            if (message is not null)
+                return message;
+            else
+                return null;
+        }
+
+        public List<Message> GetMessages (int id)
+        {
+            var messages = _context.Messages.Where(m=>m.RecepientId == id).ToList();
+
+            if (messages is not null)
+                return messages;
+            else
+                return Enumerable.Empty<Message>().ToList();
+        }
     }
 }

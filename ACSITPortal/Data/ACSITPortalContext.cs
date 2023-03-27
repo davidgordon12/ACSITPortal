@@ -36,5 +36,6 @@ namespace ACSITPortal.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Entities.Thread> Threads { get; set; }
         public DbSet<Reply> Replies { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

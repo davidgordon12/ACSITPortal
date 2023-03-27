@@ -15,12 +15,14 @@ namespace ACSITPortal.Controllers
     {
         private readonly UserService _userService;
         private readonly PostService _postService;
+        private readonly CommentService _commentService;
         private readonly SessionManager _sessionManager;
 
-        public UsersController(UserService userService, PostService postService, SessionManager sessionManager)
+        public UsersController(UserService userService, PostService postService, CommentService commentService, SessionManager sessionManager)
         {
             _userService = userService;
             _postService = postService;
+            _commentService = commentService;
             _sessionManager = sessionManager;
         }
 
@@ -182,14 +184,25 @@ namespace ACSITPortal.Controllers
 
             foreach(var post in posts)
             {
-                post.Threads = _postService.GetThreadsByPostId(post.PostId);
+                post.Threads = _commentService.GetThreadsByPostId(post.PostId);
 
                 /* If the post has 0 threads, create an empty list
                  * so .NET doesn't give us a null warning */
                 if (post.Threads is null)
                     post.Threads = Enumerable.Empty<Entities.Thread>().ToList();
             }
-            return View(posts);
+
+            var user = _userService.GetUserById(_sessionManager.GetUserSession().UserId);
+
+            user.Messages = _userService.GetMessages(user.UserId);
+
+            ProfileViewModel profileViewModel = new ProfileViewModel
+            {
+                Posts = posts,
+                Messages = user.Messages
+            };
+
+            return View(profileViewModel);
         }
 
         public IActionResult CreatePost()
@@ -284,7 +297,7 @@ namespace ACSITPortal.Controllers
             {
                 Post = post,
                 User = _userService.GetUserById(post.UserId),
-                Threads = _postService.GetThreadsByPostId(post.PostId),
+                Threads = _commentService.GetThreadsByPostId(post.PostId),
             };
 
             ViewBag.InfoMessage = "The post has been reported";
@@ -315,7 +328,7 @@ namespace ACSITPortal.Controllers
         [HttpPost]
         public IActionResult CreateThread(Entities.Thread thread)
         {
-            if (!_postService.CreateThread(thread))
+            if (!_commentService.CreateThread(thread))
             {
                 ViewBag.ErrMessage = "There was an error creating your thread";
                 return View(thread);
@@ -346,15 +359,54 @@ namespace ACSITPortal.Controllers
         [HttpPost]
         public IActionResult CreateReply(Reply reply)
         {
-            if (!_postService.CreateReply(reply))
+            if (!_commentService.CreateReply(reply))
             {
                 ViewBag.ErrMessage = "There was an error creating your reply";
                 return View(reply);
             }
 
-            var thread = _postService.GetThreadById(reply.ThreadId);
+            var thread = _commentService.GetThreadById(reply.ThreadId);
 
             return RedirectToAction("ViewPost", "Home", new { id = thread.PostId } );
+        }
+
+        public IActionResult SendMessage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SendMessage(SendMessageViewModel messageViewModel)
+        {
+            var user = _userService.GetUserByName(messageViewModel.Recepient);
+
+            if(user is null)
+            {
+                ViewBag.ErrMessage = "Could not find the user specified";
+                return View();
+            }
+
+            Message message = new Message
+            {
+                RecepientId = user.UserId,
+                SenderId = _sessionManager.GetUserSession().UserId,
+                MessageTitle = messageViewModel.Subject,
+                MessageContent = messageViewModel.Content,
+                MessageSentDate = DateTime.Now,
+            };
+
+            _userService.SendMessage(message, user);
+            return RedirectToAction("Profile");
+        }
+
+        public IActionResult ViewMessage(int id)
+        {
+            var message = _userService.GetMessage(id);
+
+            if (message is null)
+                return NotFound();
+
+            return View(message);
         }
 
         public IActionResult Logout()

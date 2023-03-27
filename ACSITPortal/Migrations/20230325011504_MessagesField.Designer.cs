@@ -4,6 +4,7 @@ using ACSITPortal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACSITPortal.Migrations
 {
     [DbContext(typeof(ACSITPortalContext))]
-    partial class ACSITPortalContextModelSnapshot : ModelSnapshot
+    [Migration("20230325011504_MessagesField")]
+    partial class MessagesField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +36,6 @@ namespace ACSITPortal.Migrations
                     b.Property<string>("MessageContent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("MessageSentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MessageTitle")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("RecepientId")
                         .HasColumnType("int");
 
@@ -52,7 +49,7 @@ namespace ACSITPortal.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("ACSITPortal.Entities.Post", b =>

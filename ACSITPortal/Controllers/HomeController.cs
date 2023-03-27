@@ -11,12 +11,14 @@ namespace ACSITPortal.Controllers
     {
         private readonly PostService _postService;
         private readonly UserService _userService;
+        private readonly CommentService _commentService;
         private readonly SessionManager _sessionManager;
 
-        public HomeController(PostService postService, SessionManager sessionManager, UserService userService)
+        public HomeController(PostService postService, CommentService commentService, SessionManager sessionManager, UserService userService)
         {
             _postService = postService;
             _userService = userService;
+            _commentService = commentService;
             _sessionManager = sessionManager;
         }
 
@@ -31,7 +33,7 @@ namespace ACSITPortal.Controllers
 
             foreach (var post in posts)
             {
-                post.Threads = _postService.GetThreadsByPostId(post.PostId);
+                post.Threads = _commentService.GetThreadsByPostId(post.PostId);
 
                 /* If the post has 0 threads, create an empty list
                  * so .NET doesn't give us a null warning */
@@ -55,7 +57,7 @@ namespace ACSITPortal.Controllers
             {
                 Post = post,
                 User = _userService.GetUserById(post.UserId),
-                Threads = _postService.GetThreadsByPostId(post.PostId),
+                Threads = _commentService.GetThreadsByPostId(post.PostId),
             };
 
             return View(postModel);

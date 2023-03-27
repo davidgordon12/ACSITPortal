@@ -29,6 +29,10 @@ namespace ACSITPortal.Helpers
                 .HttpContext.Session.GetString("LoginAttempts"));
         }
 
+        /// <summary>
+        /// Deserializes the object stored in the HttpContext session "User"
+        /// </summary>
+        /// <returns>The User that was stored in the session</returns>
         public User GetUserSession()
         {
             try
