@@ -1,0 +1,16 @@
+﻿@using ACSITPortal.Helpers
+<style>
+    #chat-noti {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        right: 5%;
+        bottom: 5%;
+    }
+</style>
+
+@inject SessionManager _sessionManager
+@if(_sessionManager.GetUserSession() is not null)
+{
+    <a asp-action="Profile" asp-controller="Users"><img id="chat-noti" src="https://github.com/tehtko/ACSITPortal/blob/master/ACSITPortal/wwwroot/img/chat.png?raw=true" /></a>
+}
